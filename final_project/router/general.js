@@ -30,20 +30,36 @@ public_users.get('/isbn/:isbn',function (req, res) {
     res.status(200).json(book)
   }
   else{
-    res.status(404).json({message: `No Book is found for the ISBN: ${ISBN}`})
+    res.status(404).json({message: `No book under the ISBN: ${ISBN}`})
   }
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let author = req.params.author;
+  let arr = Object.entries(books)
+  let book_by_author = arr.filter((item)=>item[1].author === author)
+  if(book_by_author)
+  {
+    res.status(200).json(book_by_author[0][1])
+  }
+  else{
+    res.status(404).json({message: `No book under the author: ${author}`})
+  }
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let title = req.params.title;
+  let arr = Object.entries(books)
+  let book_by_title = arr.filter((item)=>item[1].title === title)
+  if(book_by_title)
+  {
+    res.status(200).json(book_by_title[0][1])
+  }
+  else{
+    res.status(404).json({message: `No Book is found for the title: ${title}`})
+  }
 });
 
 //  Get book review
