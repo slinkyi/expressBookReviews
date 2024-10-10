@@ -44,8 +44,40 @@ regd_users.post("/login", (req,res) => {
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    var user = req.session.authorization.user;
+    let isbn = req.params.isbn;
+    let review = req.body.review
+    var review_index
+    var book = books[isbn]
+    const review_exists = book.reviews.filter((i,index)=>{review_index = index; return i.username === user})
+    if(book)
+    {
+      if(book.reviews.length === 0 || review_exists.length === 0)
+      {
+        let new_review = { 'username': user, 'comment': review }
+        book.reviews.push(new_review)
+        res.status(200).json({message: 'Review submitted', reviews: book.reviews})
+      }
+      else{
+        book.reviews[review_index].comment = review
+        book.reviews[review_index].username = user
+        res.status(200).json({message: 'Review updated', review: book.reviews[review_index]})
+      }
+    }
+    else{
+      res.status(404).json({message: `No book under the ISBN: ${isbn}`})
+    }});
+
+// Delete a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    var user = req.session.authorization.user;
+    let isbn = req.params.isbn;
+    var review_index
+    var book = books[isbn]
+    const review_exists = book.reviews.filter((i,index)=>{review_index = index; return i.username === user})
+    book.reviews.splice(review_index,1)
+        
+    res.status(200).json({message: "Successfully deleted", book: book})
 });
 
 module.exports.authenticated = regd_users;
