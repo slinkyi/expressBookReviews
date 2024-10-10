@@ -6,9 +6,25 @@ const public_users = express.Router();
 
 
 public_users.post("/register", (req,res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
-});
+  let username= req.body.username;
+  let password= req.body.password;
+  if(username && password)
+  {
+    if(isValid(username))
+    {
+      users.push({"username":username,"password":password});
+      
+      return res.status(200).json({message: "Successfully registered. Now you can login"});
+    }
+    else
+    {
+      return res.status(402).json({message: "Username is taken"});
+    }
+  }
+  else{
+    return res.status(402).json({message: "All fields are required"});
+  }
+  });
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
@@ -58,14 +74,21 @@ public_users.get('/title/:title',function (req, res) {
     res.status(200).json(book_by_title[0][1])
   }
   else{
-    res.status(404).json({message: `No Book is found for the title: ${title}`})
+    res.status(404).json({message: `No book under the title: ${title}`})
   }
 });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let ISBN = req.params.isbn
+  let book = books[ISBN]
+  if(book)
+  {
+    res.status(200).json(book.reviews)
+  }
+  else{
+    res.status(404).json({message: `No book under the ISBN: ${ISBN}`})
+  }
 });
 
 module.exports.general = public_users;
