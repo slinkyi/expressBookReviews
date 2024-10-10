@@ -12,14 +12,26 @@ public_users.post("/register", (req,res) => {
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  if(books){
+    return res.status(300).json(books);
+  }
+  else
+  {
+    return res.status(404).json({message: 'No list of the books found'})
+  }
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let ISBN = req.params.isbn
+  let book = books[ISBN]
+  if(book)
+  {
+    res.status(200).json(book)
+  }
+  else{
+    res.status(404).json({message: `No Book is found for the ISBN: ${ISBN}`})
+  }
  });
   
 // Get book details based on author
