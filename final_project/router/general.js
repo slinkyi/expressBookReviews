@@ -13,11 +13,11 @@ public_users.post("/register", (req,res) => {
     if(isValid(username))
     {
       users.push({"username":username,"password":password});
-      return res.status(200).json({message: "Successfully registred. Now you can login"});
+      return res.status(200).json({message: "Successfully registered. Now you can login"});
     }
     else
     {
-      return res.status(402).json({message: "Username already exists"});
+      return res.status(402).json({message: "Username taken"});
     }
   }
   else{
